@@ -1,0 +1,19 @@
+#!/usr/bin/ruby
+
+# Usage:
+# ./matina input.pdf output.pdf [PDF Producer Name]
+
+require 'rubygems'
+require "origami"
+include Origami
+
+pdf = PDF.read(ARGV[0], :verbosity => Parser::VERBOSE_QUIET)
+
+# removing the prince logo
+pdf.pages.first.Annots = []
+
+# chaning prince producer name
+pdf.revisions.first.trailer.Info[:Producer] = ARGV[2] || "MATINA 0.1"
+
+# saving pdf with the new name
+pdf.saveas(ARGV[1])
